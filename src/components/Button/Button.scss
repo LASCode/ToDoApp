@@ -1,0 +1,41 @@
+.Button {
+  height: 30px;
+  padding: 5px;
+  background: linear-gradient(#00A8A8 100%, #00D2D2 100%);
+  border-radius: 5px;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 5px;
+  box-sizing: border-box;
+  border: 0;
+  user-select: none;
+  cursor: pointer;
+
+  &__text {
+    line-height: 20px;
+    font-size: 15px;
+  }
+  &__icon {
+    height: 20px;
+    width: 20px;
+  }
+
+  &--with-icon {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    grid-column-gap: 5px;
+  }
+  &--without-text {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 5px;
+  }
+  &--with-adaptive {
+    width: 100%;
+  }
+
+  &:hover {
+    box-shadow: 0 0 12px 0 rgba(34, 60, 80, 0.4) inset;
+  }
+}

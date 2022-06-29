@@ -1,0 +1,91 @@
+@import '../../styles/variables.scss';
+
+.Input {
+  width: 100%;
+  position: relative;
+
+  &__flex-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__textarea {
+    padding: 5px 10px;
+    background-color: white;
+    font-family: $font-rubik;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    //border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid white;
+
+    &--with-adaptive {
+      width: 100%;
+    }
+    &--with-error {
+      border: 1px solid rgba(255, 0, 0, 0.4);
+    }
+  }
+
+  &__error-btn {
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    z-index: 10;
+    cursor: pointer;
+    margin-right: 10px;
+
+    &>img {
+      position: absolute;
+      height: 15px;
+      width: 15px;
+    }
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  &__error-box {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    opacity: 0;
+    right: 0;
+    background-color: #ff5e76;
+    min-height: 28px;
+    width: 28px;
+    z-index: 9;
+    margin: 2px;
+    border-radius: 4px;
+    box-sizing: border-box;
+
+    transition: all .5s;
+
+    &-enter-done, &-enter-active{
+      width: 100%;
+      opacity: 1;
+      margin: 0;
+      min-height: 32px;
+      max-height: 150px;
+    }
+    &-exit-done, &-exit-active{
+      opacity: 0;
+      min-height: 28px;
+    }
+  }
+  &__error-text {
+    color: white;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: $font-ionicons;
+    line-height: 10px;
+    font-size: 10px;
+    margin-left: 10px;
+  }
+
+}

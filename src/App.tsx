@@ -1,56 +1,69 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import './App.scss';
+import { Portal } from 'react-portal';
+import React, { useContext, useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { fetchAuth } from './redux/actions';
+import { TimeLineBox } from './components/TimeLineBox/TimeLineBox';
+import { Header } from './components/Header/Header';
+import { authActions } from './redux/reducers/authReducer/authReducer';
+import { getAuthToken } from './features/get-auth-token';
+import { setDefaultLocalStorage } from './features/set-default-local-storage';
+import { Routes, Route } from 'react-router-dom';
+import Navigation from './components/Navigation/Navigation';
+import { Login } from './pages/Login/Login';
+import { Register } from './pages/Register/Register';
 
 function App() {
+  const dispatch = useAppDispatch();
+  const { token, access, userData } = useAppSelector(state => state.authReducer)
+  const s = useAppSelector(state => state.authReducer)
+  const [siteAccess, setSiteAccess] = useState(false);
+  const [timePassed, setTimePassed] = useState(false);
+
+
+  useEffect(() => {
+    setDefaultLocalStorage();
+    dispatch(authActions.setToken(getAuthToken()));
+    setTimeout(() => setTimePassed(true), 0);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (token !== false) {
+      if (token !== '') {
+        dispatch(fetchAuth(token))
+      } else {
+        dispatch(authActions.setAccess());
+      }
+    }
+  }, [token])
+
+  useEffect(() => {
+    if (access && timePassed) {
+      setSiteAccess(true);
+    }
+  }, [access, timePassed])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <div className={'App__container'}>
+        <header className={'App__header'}> <Header/> </header>
+        <main className={'App__main'}>
+          <div className={'App__navbar'}> <Navigation/> </div>
+          <div className={'App__content'}>
+            <Routes>
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+            </Routes>
+          </div>
+          <div className={'App__timeline'}> <TimeLineBox/> </div>
+        </main>
+      </div>
+      {!siteAccess &&
+        <Portal node={document.body}>
+          <div className={'App__test-access-box'}/>
+        </Portal>
+      }
     </div>
   );
 }

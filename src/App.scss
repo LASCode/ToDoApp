@@ -1,0 +1,108 @@
+.App {
+  &__container {
+    max-width: 900px;
+    padding: 0 20px;
+    margin: 0 auto;
+  }
+  &__header {
+    margin: 0 170px;
+    height: 100px;
+  }
+  &__main {
+    display: grid;
+    grid-template-columns: 150px minmax(300px, 1fr) 150px;
+    grid-column-gap: 20px;
+    height: 500px;
+  }
+  &__navbar {
+    border-radius: 5px;
+    background-color: #e0e0e0;
+    box-shadow: 0 -5px 6px -5px rgba(34, 60, 80, 0.6) inset,
+                0 5px 6px -5px rgba(34, 60, 80, 0.6) inset;
+    overflow: hidden;
+  }
+  &__timeline {
+    border-radius: 5px;
+    background-color: #e0e0e0;
+    box-shadow: 0 -5px 6px -5px rgba(34, 60, 80, 0.6) inset,
+                0 5px 6px -5px rgba(34, 60, 80, 0.6) inset;
+    overflow: hidden;
+  }
+  &__content {}
+  &__test-access-box {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 10px;
+    background-color: red;
+  }
+}
+
+
+@media screen and (max-width: 680px) {
+  .App__container { padding: 0 10px }
+  .App__main { grid-column-gap: 10px }
+}
+@media screen and (max-width: 725px) {
+  .App__header {
+    margin: 0;
+  }
+}
+
+
+.appData1 {
+  position: relative;
+  margin-top: 20px;
+  width: 300px;
+  height: 100px;
+  background-color: whitesmoke;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+
+
+
+  &__block {
+    display: flex;
+    position: absolute;
+    height: 100%;
+    width: 150px;
+    background-color: whitesmoke;
+    transition: transform 1s ease-in-out;
+    z-index: 10;
+
+    &--left {
+      left: 0;
+      &:before {
+        content: '';
+        position: absolute;
+        left: 150px;
+        width: 150px;
+        height: 100%;
+        background: linear-gradient(to right bottom, whitesmoke 50%, transparent 50%);
+      }
+      &-enter-active, &-enter-done {
+        transform: translateX(-300px);
+      }
+    }
+    &--right {
+      right: 0;
+      &:before {
+        content: '';
+        position: absolute;
+        right: 150px;
+        width: 150px;
+        height: 100%;
+        background: linear-gradient(to left top, whitesmoke 50%, transparent 50%);
+      }
+      &-enter-active, &-enter-done {
+        transform: translateX(300px);
+      }
+    }
+  }
+}
+
+
+

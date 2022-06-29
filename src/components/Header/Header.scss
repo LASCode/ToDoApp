@@ -1,0 +1,31 @@
+.Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+
+  &__project-name {
+    font-size: 35px;
+    color: gray;
+    font-weight: 500;
+  }
+  &__project-github {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &__github-link {
+    font-size: 20px;
+    color: gray;
+    font-weight: 500;
+  }
+  &__github-icon {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+  }
+}

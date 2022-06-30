@@ -1,0 +1,27 @@
+@import '../../../styles/variables.scss';
+.NavButton {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-column-gap: 5px;
+  text-decoration: none;
+  width: 100%;
+  padding: 4px;
+  box-sizing: border-box;
+  background: $button-gradient;
+  border-radius: 5px;
+
+  &__title {
+    font-family: $font-rubik;
+    font-weight: 600;
+    line-height: 24px;
+    font-size: 15px;
+    text-align: center;
+    color: white;
+  }
+  &__img {
+    margin: 2px 0;
+    height: inherit;
+    width: inherit;
+    color: white;
+  }
+}

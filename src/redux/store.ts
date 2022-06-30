@@ -1,13 +1,21 @@
-import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  ThunkAction,
+  Action,
+  combineReducers,
+  getDefaultMiddleware,
+  Middleware
+} from '@reduxjs/toolkit';
 import { authReducer } from './reducers/authReducer/authReducer';
+import { localstorageMW } from './middlewares/localstorageMW';
 
-
-
+const middlewares: Middleware[] = [localstorageMW];
 const rootReducer = combineReducers({
    authReducer: authReducer,
 })
 export const setupStore = () => configureStore({
   reducer: rootReducer,
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
 })
 
 

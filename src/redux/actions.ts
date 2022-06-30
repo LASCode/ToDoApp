@@ -3,7 +3,6 @@ import { asyncServerRequest } from '../fakeBackend';
 import { authActions } from './reducers/authReducer/authReducer';
 
 const fetchAuth = (token: string) => async (dispatch: AppDispatch) => {
-  console.log(token)
   const { checkAuth } = asyncServerRequest;
   try {
     dispatch(authActions.authFetching());
@@ -25,4 +24,19 @@ const fetchAuth = (token: string) => async (dispatch: AppDispatch) => {
 
 }
 
-export { fetchAuth }
+const fetchRegister = ({username, login, password}: {username: string, password: string, login: string}) => async (dispatch: AppDispatch) => {
+  try {
+    const { setToken,  } = authActions
+    const { register } = asyncServerRequest;
+    dispatch(authActions.authFetching());
+    const response = await register(login, password, username);
+    if (response.data.success) {
+      dispatch(setToken(response.data.token as string));
+      // dispatch()
+    }
+  } catch (e) {
+
+  }
+}
+
+export { fetchAuth, fetchRegister }

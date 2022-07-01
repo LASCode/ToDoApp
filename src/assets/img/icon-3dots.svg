@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg viewBox="0 0 132 58" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<title>dots</title>
+	<desc>Created with Sketch.</desc>
+	<style>
+		.dots>*:nth-child(1) {
+			animation: load 1s infinite;
+		}
+		.dots>*:nth-child(2) {
+			animation: load 1s infinite;
+			animation-delay: 0.2s;
+		}
+		.dots>*:nth-child(3) {
+			animation: load 1s infinite;
+			animation-delay: 0.4s;
+		}
+		@keyframes load {
+			0%{ opacity: 0; }
+			50%{ opacity: 1; }
+			100%{ opacity: 0; }
+		}
+	</style>
+	<g id="Page-1" stroke="none" stroke-width="1">
+		<g class="dots">
+			<circle cx="25" cy="30" r="13" />
+			<circle cx="65" cy="30" r="13" />
+			<circle cx="105" cy="30" r="13" />
+		</g>
+	</g>
+</svg>

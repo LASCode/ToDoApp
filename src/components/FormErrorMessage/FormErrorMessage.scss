@@ -1,0 +1,30 @@
+.FormErrorMessage {
+  position: relative;
+
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: 20px 1fr 20px;
+  border-radius: 5px;
+  background-color: #FF6262;
+  color: white;
+  text-align: center;
+  transition: all .5s;
+  padding: 0;
+  height: 0;
+  overflow: hidden;
+
+  &__text {
+    text-align: center;
+    line-height: 20px;
+    font-size: 13px;
+  }
+
+  &-enter-active, &-enter-done {
+    height: 30px;
+    padding: 5px;
+  }
+  &-exit-active, &-exit-done {
+    height: 0;
+    padding: 0;
+  }
+}

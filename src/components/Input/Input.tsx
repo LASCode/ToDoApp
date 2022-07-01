@@ -1,7 +1,7 @@
 import './Input.scss';
 import React, { ForwardedRef, HTMLInputTypeAttribute, useState } from 'react';
 import { getClassnamesFromObject } from '../../features/get-classnames-from-object';
-import imgAlert from '../../assets/img/icon-alert.svg';
+import {ReactComponent as AlertSvg} from '../../assets/img/icon-alert.svg';
 import { CSSTransition } from 'react-transition-group';
 
 interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -27,9 +27,11 @@ const Input = React.forwardRef(({ adaptive = true, error = false, errorMessage =
         <input className={classNames} {...anotherInputParams} ref={ref}/>
 
         { error &&
-          <span className='Input__error-btn' title='Показать ошибку' onClick={onClick}>
-            <img src={imgAlert} alt=""/>
-          </span>
+        <span className='Input__error-btn' title='Показать ошибку' onClick={onClick}>
+          <CSSTransition in={!openErrorMessage} timeout={500} classNames={'Input__error-svg'}>
+            <AlertSvg className='Input__error-svg'/>
+          </CSSTransition>
+        </span>
         }
       </div>
       <CSSTransition in={!openErrorMessage} timeout={500} unmountOnExit classNames='Input__error-box'>

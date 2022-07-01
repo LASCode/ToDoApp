@@ -17,7 +17,6 @@
     font-weight: 400;
     font-size: 15px;
     line-height: 20px;
-    //border: none;
     border-radius: 5px;
     box-sizing: border-box;
     outline: none;
@@ -29,6 +28,10 @@
     &--with-error {
       border: 1px solid rgba(255, 0, 0, 0.4);
     }
+    &:disabled {
+      background-color: #c9c9c9;
+      border: 1px solid #b4b4b4;
+    }
   }
 
   &__error-btn {
@@ -38,17 +41,26 @@
     z-index: 10;
     cursor: pointer;
     margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform .5s;
 
-    &>img {
-      position: absolute;
-      height: 15px;
-      width: 15px;
-    }
     &:hover {
       transform: scale(1.05);
     }
-  }
 
+  }
+  &__error-svg {
+    fill: #ff7f7f;
+    transition: fill .5s;
+    &-enter-active, &-enter-done {
+      fill: white;
+    };
+    &-exit-active, &-exit-done {
+      fill: #ff7f7f;
+    };
+  }
   &__error-box {
     position: absolute;
     display: flex;

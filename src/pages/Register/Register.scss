@@ -1,0 +1,67 @@
+@import '../../styles/variables.scss';
+.RegistrationPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  &__container {
+    width: 300px;
+    min-height: 100px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0 -5px 6px -5px rgba(34, 60, 80, 0.6) inset,
+    0 5px 6px -5px rgba(34, 60, 80, 0.6) inset;
+  }
+  &__padding-wrapper {
+    &--with-form {
+      padding: 25px 25px 10px 25px;
+    }
+    &--with-login-btn {
+      padding: 10px 25px 25px 25px;
+    }
+  }
+  &__title {
+    font-family: $font-rubik;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+  }
+  &__form {
+    margin-top: 20px;
+    display: grid;
+    grid-template-rows: repeat(4, min-content);
+    grid-row-gap: 3px;
+  }
+  &__register-button-container {
+    margin-top: 5px;
+  }
+  &__br {
+    position: relative;
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(179, 179, 179, 0.3);
+    }
+  }
+  &__br-text {
+    z-index: 5;
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 400;
+    color: #B3B3B3;
+    padding: 0 10px;
+    background-color: $default-block-color;
+  }
+  &__error-message-container {
+    margin-bottom: 5px;
+  }
+}

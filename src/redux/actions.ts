@@ -26,13 +26,17 @@ const fetchAuth = (token: string) => async (dispatch: AppDispatch) => {
 
 const fetchRegister = ({username, login, password}: {username: string, password: string, login: string}) => async (dispatch: AppDispatch) => {
   try {
-    const { setToken,  } = authActions
     const { register } = asyncServerRequest;
-    dispatch(authActions.authFetching());
+    dispatch(authActions.registerFetching());
     const response = await register(login, password, username);
     if (response.data.success) {
-      dispatch(setToken(response.data.token as string));
-      // dispatch()
+      if (response.data.token) {
+        dispatch(authActions.registerFetchingSuccess(response.data.token));
+      }
+    } else {
+      if (response.data.error) {
+        dispatch(authActions.registerFetchingError(response.data.error));
+      }
     }
   } catch (e) {
 

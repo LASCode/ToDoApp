@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IReduxAuthData, IServerUserShort } from '../../../types/entity';
 import { IAuthResponseData } from '../../../types/serverResponses';
+import { LSVariables } from '../../../vriables/variables';
+import { getAuthToken } from '../../../features/get-auth-token';
 
 interface IAuthStore {
   userData: IReduxAuthData | false,
@@ -8,8 +10,11 @@ interface IAuthStore {
   authorized: boolean,
   logoutMenu: boolean,
   isFetching: boolean,
-  token: string | false,
+  token: string | null,
   error: string | false,
+
+  registerIsFetching: boolean,
+  registerError: string | false,
 }
 const initialStore: IAuthStore = {
   userData: false,
@@ -17,8 +22,11 @@ const initialStore: IAuthStore = {
   authorized: false,
   isFetching: false,
   logoutMenu: false,
-  token: false,
+  token: null,
   error: false,
+
+  registerIsFetching: false,
+  registerError: false,
 }
 
 const authSlice = createSlice({
@@ -53,8 +61,19 @@ const authSlice = createSlice({
       state.token = '';
       state.userData = false;
     },
+
     registerFetching(state: IAuthStore) {
-      state.isFetching = true;
+      state.registerIsFetching = true;
+    },
+    registerFetchingSuccess(state: IAuthStore, action: PayloadAction<string>) {
+      state.registerIsFetching = false;
+      state.registerError = false;
+      state.authorized = true;
+      state.token = action.payload;
+    },
+    registerFetchingError(state: IAuthStore, action: PayloadAction<string>) {
+      state.registerIsFetching = false;
+      state.registerError = action.payload;
     }
   },
 })

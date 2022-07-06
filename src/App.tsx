@@ -12,6 +12,8 @@ import { Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
+import { Profile } from './pages/Profile/Profile';
+import Tasks from './pages/Tasks/Tasks';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -22,20 +24,27 @@ function App() {
 
 
   useEffect(() => {
-    setDefaultLocalStorage();
     dispatch(authActions.setToken(getAuthToken()));
     setTimeout(() => setTimePassed(true), 0);
   }, [dispatch]);
 
   useEffect(() => {
-    if (token !== false) {
-      if (token !== '') {
-        dispatch(fetchAuth(token))
-      } else {
-        dispatch(authActions.setAccess());
-      }
+    if (token !== null) {
+      dispatch(fetchAuth(token));
+    } else {
+      dispatch(authActions.setAccess());
     }
   }, [token])
+
+  // useEffect(() => {
+  //   if (token !== false) {
+  //     if (token !== '') {
+  //       dispatch(fetchAuth(token))
+  //     } else {
+  //       dispatch(authActions.setAccess());
+  //     }
+  //   }
+  // }, [token])
 
   useEffect(() => {
     if (access && timePassed) {
@@ -52,8 +61,12 @@ function App() {
           <div className={'App__navbar'}> <Navigation/> </div>
           <div className={'App__content'}>
             <Routes>
+              <Route path='/' element={<Tasks />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
+              <Route path='/profile' element={<Profile />}>
+                <Route path=':id' element={<Profile />}/>
+              </Route>
             </Routes>
           </div>
           <div className={'App__timeline'}> <TimeLineBox/> </div>

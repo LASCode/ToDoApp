@@ -1,21 +1,22 @@
 import './Input.scss';
 import React, { ForwardedRef, HTMLInputTypeAttribute, useState } from 'react';
 import { getClassnamesFromObject } from '../../features/get-classnames-from-object';
-import {ReactComponent as AlertSvg} from '../../assets/img/icon-alert.svg';
+import { ReactComponent as AlertSvg } from '../../assets/img/icon-alert.svg';
 import { CSSTransition } from 'react-transition-group';
 
 interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
   adaptive?: boolean,
   error?: boolean,
   errorMessage?: string,
+  className?: string
 }
 
-const Input = React.forwardRef(({ adaptive = true, error = false, errorMessage = 'хуй', ...anotherInputParams }: IInput, ref: ForwardedRef<any>) => {
+const Input = React.forwardRef(({ adaptive = true, error = false, errorMessage = 'хуй', className, ...anotherInputParams }: IInput, ref: ForwardedRef<any>) => {
   const classNames = getClassnamesFromObject({
     'Input__textarea' : true,
     'Input__textarea--with-adaptive' : adaptive,
     'Input__textarea--with-error' : error,
-  });
+  }) + `${className ? ` ${className}` : ''}`;
   const [openErrorMessage, setOpenErrorMessage] = useState(true);
   const onClick = () => {
     setOpenErrorMessage(!openErrorMessage);

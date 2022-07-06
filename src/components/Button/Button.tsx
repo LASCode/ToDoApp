@@ -10,15 +10,16 @@ interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement>{
   adaptive?: boolean,
   loading?: boolean,
   disabled?: boolean,
+  className?: string,
 }
 
-const Button = ({icon, children, type = 'button', adaptive = true, loading = false, disabled = false, ...otherParams}: IButton) => {
+const Button = ({icon, children, type = 'button', adaptive = true, loading = false, disabled = false, className, ...otherParams}: IButton) => {
   const classNames = getClassnamesFromObject({
     'Button' : true,
     'Button--with-icon': icon,
     'Button--without-text': !children,
     'Button--with-adaptive': adaptive,
-  });
+  }) + `${className ? ` ${className}` : ''}`;
   return (
     <button className={classNames} type={type} {...otherParams} disabled={disabled}>
       { icon && <img className='Button__icon' src={icon} alt='Button Icon'/> }

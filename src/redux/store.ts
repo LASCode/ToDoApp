@@ -8,10 +8,12 @@ import {
 } from '@reduxjs/toolkit';
 import { authReducer } from './reducers/authReducer/authReducer';
 import { localstorageMW } from './middlewares/localstorageMW';
+import { scrollReducer } from './reducers/scrollReducer/scrollReducer';
 
 const middlewares: Middleware[] = [localstorageMW];
 const rootReducer = combineReducers({
-   authReducer: authReducer,
+  authReducer: authReducer,
+  scrollReducer: scrollReducer,
 })
 export const setupStore = () => configureStore({
   reducer: rootReducer,

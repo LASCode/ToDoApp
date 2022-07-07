@@ -18,10 +18,18 @@ import Tasks from './pages/Tasks/Tasks';
 function App() {
   const dispatch = useAppDispatch();
   const { token, access, userData } = useAppSelector(state => state.authReducer)
+  const { noScrollRequests } = useAppSelector(state => state.scrollReducer);
   const s = useAppSelector(state => state.authReducer)
   const [siteAccess, setSiteAccess] = useState(false);
   const [timePassed, setTimePassed] = useState(false);
 
+  useEffect(() => {
+    if (noScrollRequests.length > 0) {
+      document.body.classList.add('no-scroll')
+    } else {
+      document.body.classList.remove('no-scroll')
+    }
+  }, [noScrollRequests])
 
   useEffect(() => {
     dispatch(authActions.setToken(getAuthToken()));

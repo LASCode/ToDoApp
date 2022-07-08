@@ -2,7 +2,7 @@ const initialStorageName = 'DataBase';
 const initialDataBase = {
   users: [],
 };
-const initialTimeOut = 11500;
+const initialTimeOut = 500;
 
 const defaultUserAvatar = 'https://i.ibb.co/w6c7gjL/default-User-Avatar.png';
 const defaultUserName = 'Неавторизованный пользователь';

@@ -1,0 +1,13 @@
+@import '../../../styles/variables.scss';
+.TimeSection {
+  margin-top: 5px;
+  padding: 0 10px 10px 10px;
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__body {
+    margin-top: 5px;
+  }
+}

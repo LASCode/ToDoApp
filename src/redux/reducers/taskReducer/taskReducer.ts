@@ -8,11 +8,27 @@ interface ITasks {
   tasks: ITask[],
   isFetching: boolean,
   error: string,
+  newTaskOptions: {
+    isOpen: boolean,
+    name: string | null,
+    description: string | null,
+    deadline: { active: boolean, value: number[] },
+    important: { active: boolean, value: number[] },
+    notifications: { active: boolean, value: number[] },
+  }
 }
 const initialState: ITasks = {
   tasks: [],
   isFetching: false,
-  error: ''
+  error: '',
+  newTaskOptions: {
+    isOpen: false,
+    name: null,
+    description: null,
+    deadline: { active: false, value: [] },
+    important: { active: false, value: [] },
+    notifications: { active: false, value: [] },
+  }
 }
 
 const taskSlice = createSlice({
@@ -31,6 +47,10 @@ const taskSlice = createSlice({
       state.isFetching = false;
       state.error = action.payload
     },
+    isOpenToggle(state: ITasks, action: PayloadAction<boolean>) {
+      state.newTaskOptions.isOpen = action.payload;
+    },
+
   },
 })
 

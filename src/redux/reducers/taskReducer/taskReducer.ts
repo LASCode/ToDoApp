@@ -1,34 +1,37 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ITask {
+  isSynchronized: boolean,
+  isFetching: boolean,
   id: number,
-  title: string,
+  name: string,
+  description: string,
+  deadline: { isActive: boolean, value: number[] },
+  important: { isActive: boolean, value: number[] },
+  notifications: { isActive: boolean, value: number[] },
+  status: 'active' | 'failed' | 'deleted',
 }
 interface ITasks {
   tasks: ITask[],
   isFetching: boolean,
   error: string,
-  newTaskOptions: {
-    isOpen: boolean,
-    name: string | null,
-    description: string | null,
-    deadline: { active: boolean, value: number[] },
-    important: { active: boolean, value: number[] },
-    notifications: { active: boolean, value: number[] },
-  }
+  NTIsOpen: boolean,
+  NTName: string,
+  NTDesc: string,
+  NTDeadline: { isActive: boolean, isOpen: boolean, value: number[] },
+  NTImportant: { isActive: boolean, isOpen: boolean, value: number[] },
+  NTNotification: { isActive: boolean, isOpen: boolean, value: number[] },
 }
 const initialState: ITasks = {
   tasks: [],
   isFetching: false,
   error: '',
-  newTaskOptions: {
-    isOpen: false,
-    name: null,
-    description: null,
-    deadline: { active: false, value: [] },
-    important: { active: false, value: [] },
-    notifications: { active: false, value: [] },
-  }
+  NTIsOpen: false,
+  NTName: '',
+  NTDesc: '',
+  NTDeadline: { isActive: false, isOpen: false, value: [] },
+  NTImportant: { isActive: false, isOpen: false, value: [] },
+  NTNotification: { isActive: false, isOpen: false, value: [] },
 }
 
 const taskSlice = createSlice({
@@ -45,12 +48,37 @@ const taskSlice = createSlice({
     },
     taskFetchingError(state: ITasks, action: PayloadAction<string>) {
       state.isFetching = false;
-      state.error = action.payload
+      state.error = action.payload;
+    },
+    clearNTForm(state: ITasks) {
+      state.NTName = '';
+      state.NTDesc = '';
+      state.NTIsOpen = false;
+      state.NTDeadline = { isOpen: false, isActive: false, value: [] };
+      state.NTNotification = { isOpen: false, isActive: false, value: [] };
+      state.NTImportant = { isOpen: false, isActive: false, value: [] };
     },
     isOpenToggle(state: ITasks, action: PayloadAction<boolean>) {
-      state.newTaskOptions.isOpen = action.payload;
+      state.NTIsOpen = action.payload;
     },
-
+    setTaskName(state: ITasks, action: PayloadAction<string>) {
+      state.NTName = action.payload;
+    },
+    setTaskDescription(state: ITasks, action: PayloadAction<string>) {
+      state.NTDesc = action.payload;
+    },
+    deadlineIsOpenToggle(state: ITasks, action: PayloadAction<boolean>) {
+      state.NTDeadline = { ...state.NTDeadline, isOpen: action.payload };
+    },
+    deadlineIsActiveToggle(state: ITasks, action: PayloadAction<boolean>) {
+      state.NTDeadline = { ...state.NTDeadline, isActive: action.payload };
+    },
+    deadlineSetData(state: ITasks, action: PayloadAction<number[]>){
+      state.NTDeadline = { ...state.NTDeadline, value: action.payload };
+    },
+    createNewTask(state: ITasks) {
+      console.log(state);
+    }
   },
 })
 

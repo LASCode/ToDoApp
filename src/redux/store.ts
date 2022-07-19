@@ -13,6 +13,7 @@ const rootReducer = combineReducers({
 export const setupStore = () => configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares),
+  devTools: true,
 })
 
 

@@ -1,29 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IReduxAuthData, IServerUserShort } from '../../../types/entity';
-import { IAuthResponseData } from '../../../types/serverResponses';
-import { LSVariables } from '../../../vriables/variables';
-import { getAuthToken } from '../../../features/get-auth-token';
+import { IReduxAuthData } from '../../../types/entity';
 
 interface IAuthStore {
+  authAccess: boolean,
+  authIsFetching: boolean,
+  authError: string | null,
+
   userData: IReduxAuthData | false,
-  access: boolean,
-  authorized: boolean,
-  logoutMenu: boolean,
-  isFetching: boolean,
   token: string | null,
-  error: string | false,
 
   registerIsFetching: boolean,
   registerError: string | false,
 }
 const initialStore: IAuthStore = {
+  authAccess: false,
+  authIsFetching: false,
+  authError: null,
+
   userData: false,
-  access: false,
-  authorized: false,
-  isFetching: false,
-  logoutMenu: false,
   token: null,
-  error: false,
 
   registerIsFetching: false,
   registerError: false,
@@ -37,27 +32,25 @@ const authSlice = createSlice({
       state.token = action.payload;
     },
     setAccess(state: IAuthStore) {
-      state.access = true;
+      state.authAccess = true;
     },
 
 
     authFetching(state: IAuthStore) {
-      state.isFetching = true;
+      state.authIsFetching = true;
     },
     authFetchingSuccess(state: IAuthStore, action: PayloadAction<IReduxAuthData>) {
-      state.isFetching = false;
-      state.error = false;
-      state.logoutMenu = false;
-      state.access = true;
-      state.authorized = true;
+      state.authIsFetching = false;
+      state.authError = null;
+      state.authAccess = true
+
       state.userData = { ...action.payload };
     },
     authFetchingError(state: IAuthStore, action: PayloadAction<string>) {
-      state.error = action.payload;
-      state.logoutMenu = true;
-      state.access = true;
-      state.isFetching = false;
-      state.authorized = false;
+      state.authIsFetching = false;
+      state.authError = action.payload;
+      state.authAccess = true
+
       state.token = '';
       state.userData = false;
     },
@@ -68,7 +61,6 @@ const authSlice = createSlice({
     registerFetchingSuccess(state: IAuthStore, action: PayloadAction<string>) {
       state.registerIsFetching = false;
       state.registerError = false;
-      state.authorized = true;
       state.token = action.payload;
     },
     registerFetchingError(state: IAuthStore, action: PayloadAction<string>) {

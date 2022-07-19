@@ -77,7 +77,17 @@ const taskSlice = createSlice({
       state.NTDeadline = { ...state.NTDeadline, value: action.payload };
     },
     createNewTask(state: ITasks) {
-      console.log(state);
+      state.tasks.push({
+        id: state.tasks.length,
+        name: state.NTName,
+        description: state.NTDesc,
+        status: 'active',
+        isFetching: true,
+        isSynchronized: false,
+        deadline: { isActive: state.NTDeadline.isActive, value: state.NTDeadline.value },
+        notifications: { isActive: state.NTNotification.isActive, value: state.NTNotification.value },
+        important: { isActive: state.NTImportant.isActive, value: state.NTImportant.value },
+      })
     }
   },
 })

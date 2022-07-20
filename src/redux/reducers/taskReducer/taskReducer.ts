@@ -1,20 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ITask } from '../../../types/entity';
+import { fetchTasks } from '../../actions';
 
-interface ITask {
-  isSynchronized: boolean,
-  isFetching: boolean,
-  id: number,
-  name: string,
-  description: string,
-  deadline: { isActive: boolean, value: number[] },
-  important: { isActive: boolean, value: number[] },
-  notifications: { isActive: boolean, value: number[] },
-  status: 'active' | 'failed' | 'deleted',
-}
 interface ITasks {
   tasks: ITask[],
   isFetching: boolean,
-  error: string,
+  error: string | null,
   NTIsOpen: boolean,
   NTName: string,
   NTDesc: string,
@@ -25,7 +16,7 @@ interface ITasks {
 const initialState: ITasks = {
   tasks: [],
   isFetching: false,
-  error: '',
+  error: null,
   NTIsOpen: false,
   NTName: '',
   NTDesc: '',
@@ -81,15 +72,39 @@ const taskSlice = createSlice({
         id: state.tasks.length,
         name: state.NTName,
         description: state.NTDesc,
-        status: 'active',
+        status: 'Active',
         isFetching: true,
         isSynchronized: false,
+        unix: Date.now(),
         deadline: { isActive: state.NTDeadline.isActive, value: state.NTDeadline.value },
         notifications: { isActive: state.NTNotification.isActive, value: state.NTNotification.value },
         important: { isActive: state.NTImportant.isActive, value: state.NTImportant.value },
       })
+    },
+    clearNewTask(state: ITasks) {
+      state.NTName = '';
+      state.NTDesc = '';
+      state.NTDeadline = { isActive: false, isOpen: false, value: [] };
+      state.NTImportant = { isActive: false, isOpen: false, value: [] };
+      state.NTNotification = { isActive: false, isOpen: false, value: [] };
     }
   },
+  extraReducers: (builder => {
+    builder
+      .addCase(fetchTasks.pending, (state: ITasks) => {
+        state.isFetching = true;
+        state.error = null;
+      })
+      .addCase(fetchTasks.fulfilled, (state: ITasks, action) => {
+        state.isFetching = false;
+        state.error = action.payload.data.error ? action.payload.data.error : null;
+        state.tasks = action.payload.data.tasks;
+      })
+      .addCase(fetchTasks.rejected, (state: ITasks) => {
+        state.isFetching = false;
+        state.error = 'Сервер отклонил запрос, соре';
+      })
+  })
 })
 
 export const taskActions = taskSlice.actions;

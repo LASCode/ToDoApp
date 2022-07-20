@@ -1,27 +1,36 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IReduxAuthData } from '../../../types/entity';
+import { fetchAuth, fetchLogin, fetchRegister } from '../../actions';
 
 interface IAuthStore {
   authAccess: boolean,
   authIsFetching: boolean,
   authError: string | null,
+  authSuccess: boolean,
 
-  userData: IReduxAuthData | false,
+  userData: IReduxAuthData | null,
   token: string | null,
 
   registerIsFetching: boolean,
-  registerError: string | false,
+  registerError: string | null,
+
+  loginIsFetching: boolean,
+  loginError: string | null
 }
 const initialStore: IAuthStore = {
   authAccess: false,
   authIsFetching: false,
   authError: null,
+  authSuccess: false,
 
-  userData: false,
+  userData: null,
   token: null,
 
   registerIsFetching: false,
-  registerError: false,
+  registerError: null,
+
+  loginIsFetching: false,
+  loginError: null,
 }
 
 const authSlice = createSlice({
@@ -34,40 +43,60 @@ const authSlice = createSlice({
     setAccess(state: IAuthStore) {
       state.authAccess = true;
     },
-
-
-    authFetching(state: IAuthStore) {
-      state.authIsFetching = true;
+    logOut(state: IAuthStore) {
+      state.token = null;
+      state.userData = null;
+      state.authSuccess = false;
     },
-    authFetchingSuccess(state: IAuthStore, action: PayloadAction<IReduxAuthData>) {
-      state.authIsFetching = false;
-      state.authError = null;
-      state.authAccess = true
-
-      state.userData = { ...action.payload };
-    },
-    authFetchingError(state: IAuthStore, action: PayloadAction<string>) {
-      state.authIsFetching = false;
-      state.authError = action.payload;
-      state.authAccess = true
-
-      state.token = '';
-      state.userData = false;
-    },
-
-    registerFetching(state: IAuthStore) {
-      state.registerIsFetching = true;
-    },
-    registerFetchingSuccess(state: IAuthStore, action: PayloadAction<string>) {
-      state.registerIsFetching = false;
-      state.registerError = false;
-      state.token = action.payload;
-    },
-    registerFetchingError(state: IAuthStore, action: PayloadAction<string>) {
-      state.registerIsFetching = false;
-      state.registerError = action.payload;
-    }
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAuth.pending, (state: IAuthStore) => {
+        state.authIsFetching = true;
+        state.authError = null;
+      })
+      .addCase(fetchAuth.fulfilled, (state: IAuthStore, action) => {
+        state.authIsFetching = false;
+        state.authError = null;
+        state.authAccess = true;
+        state.authSuccess = action.payload.data.success;
+        state.token = action.payload.data.success ? state.token : null;
+        state.userData = action.payload.data.success ? action.payload.data.userData : null;
+      })
+      .addCase(fetchAuth.rejected, (state: IAuthStore) => {
+        state.authIsFetching = false;
+        state.authError = 'Произошла ошипка сервера, извинити';
+        state.authAccess = true;
+      })
+
+      .addCase(fetchRegister.pending, (state: IAuthStore) => {
+        state.registerIsFetching = true;
+        state.registerError = null;
+      })
+      .addCase(fetchRegister.fulfilled, (state: IAuthStore, action) => {
+        state.registerIsFetching = false;
+        state.registerError = action.payload.data.error ? action.payload.data.error : null;
+        state.token = action.payload.data.success ? action.payload.data.token as string : null;
+      })
+      .addCase(fetchRegister.rejected, (state: IAuthStore) => {
+        state.registerIsFetching = false;
+        state.registerError = 'Сервер отменил запрос, попробуйте снова';
+      })
+
+      .addCase(fetchLogin.pending, (state: IAuthStore) => {
+        state.loginIsFetching = true;
+        state.loginError = null;
+      })
+      .addCase(fetchLogin.fulfilled, (state: IAuthStore, action) => {
+        state.loginIsFetching = false;
+        state.loginError = action.payload.data.error ? action.payload.data.error : null;
+        state.token = action.payload.data.success ? action.payload.data.token as string : null;
+      })
+      .addCase(fetchLogin.rejected, (state: IAuthStore) => {
+        state.loginIsFetching = false;
+        state.loginError = 'Сервер отменил запрос, попробуйте снова';
+      })
+  }
 })
 
 export const authActions = authSlice.actions;

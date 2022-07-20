@@ -1,46 +1,41 @@
 import { AppDispatch } from './store';
 import { asyncServerRequest } from '../fakeBackend';
-import { authActions } from './reducers/authReducer/authReducer';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  IAuthResponseData,
+  IBaseResponse,
+  ILoginResponseData,
+  IRegisterResponseData,
+  ITasksResponseData
+} from '../types/serverResponses';
 
-const fetchAuth = (token: string) => async (dispatch: AppDispatch) => {
-  const { checkAuth } = asyncServerRequest;
-  try {
-    dispatch(authActions.authFetching());
-    const response = await checkAuth(token);
-    if (response.data.success) {
-      dispatch(authActions.authFetchingSuccess({
-        id: response.data.userData.id,
-        login: response.data.userData.login,
-        username: response.data.userData.username,
-        avatar: response.data.userData.avatar,
-      }))
-    } else {
-      dispatch(authActions.authFetchingError(response.data.error || ''));
-    }
-  } catch (e) {
-    let result = e as Error;
-    dispatch(authActions.authFetchingError(result.message))
+const fetchAuth = createAsyncThunk<IBaseResponse<IAuthResponseData>, string>(
+  'auth/fetchAuth',
+  async (token, {}) => {
+    const { checkAuth } = asyncServerRequest;
+    return await checkAuth(token);
   }
-
-}
-
-const fetchRegister = ({username, login, password}: {username: string, password: string, login: string}) => async (dispatch: AppDispatch) => {
-  try {
+);
+const fetchRegister = createAsyncThunk<IBaseResponse<IRegisterResponseData>,{username: string, password: string, login: string}>(
+  'auth/fetchRegister',
+  async (registerData, {}) => {
     const { register } = asyncServerRequest;
-    dispatch(authActions.registerFetching());
-    const response = await register(login, password, username);
-    if (response.data.success) {
-      if (response.data.token) {
-        dispatch(authActions.registerFetchingSuccess(response.data.token));
-      }
-    } else {
-      if (response.data.error) {
-        dispatch(authActions.registerFetchingError(response.data.error));
-      }
-    }
-  } catch (e) {
-
+    return await register(registerData.login, registerData.password, registerData.username);
+  },
+);
+const fetchLogin = createAsyncThunk<IBaseResponse<ILoginResponseData>, {login: string, password: string}>(
+  'auth/fetchLogin',
+  async (loginData, {}) => {
+    const { login } = asyncServerRequest;
+    return await login(loginData.login, loginData.password);
   }
-}
+);
+const fetchTasks = createAsyncThunk<IBaseResponse<ITasksResponseData>, string>(
+  'task/fetchTask',
+  async (token, {}) => {
+    const { getTasks } = asyncServerRequest;
+    return await getTasks(token);
+  }
+)
 
-export { fetchAuth, fetchRegister }
+export { fetchAuth, fetchRegister, fetchLogin, fetchTasks }

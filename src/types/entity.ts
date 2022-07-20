@@ -2,28 +2,31 @@ interface IServerUser {
   id: number,
   login: string,
   password: string,
-  token: string,
+  authToken: string,
   username: string,
   avatar: string,
+  tokens: number,
   tasks: ITask[],
 }
 interface IServerUserShort {
   id: number,
   login: string,
-  token: string,
+  authToken: string,
   username: string,
   avatar: string,
+  tokens: number,
 }
 interface ITask {
+  isSynchronized: boolean,
+  isFetching: boolean,
   id: number,
-  title: string,
+  name: string,
   description: string,
-  options: {
-    deadline: number | false,
-    important: boolean,
-    notification: number[] | false,
-  },
-  type: 'active' | 'archive' | 'deleted' | 'failed'
+  deadline: { isActive: boolean, value: number[] },
+  important: { isActive: boolean, value: number[] },
+  notifications: { isActive: boolean, value: number[] },
+  status: 'Active' | 'Archive' | 'Deleted' | 'Failed',
+  unix: number,
 }
 interface IServerDataBase {
   users: IServerUser[],
@@ -34,6 +37,7 @@ interface IReduxAuthData {
   login: string,
   username: string,
   avatar: string,
+  tokens: number,
 }
 
 

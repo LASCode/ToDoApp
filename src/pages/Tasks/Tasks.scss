@@ -14,10 +14,20 @@
     border-radius: 5px;
   }
   &__taskList {
-    padding: 10px;
     box-sizing: border-box;
     background-color: $default-block-color;
     border-radius: 5px;
+    max-height: 440px;
+    overflow-y: scroll;
+    padding: 10px;
+    &::-webkit-scrollbar {
+      width: 5px;
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+    }
   }
 }
 

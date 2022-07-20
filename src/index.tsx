@@ -6,8 +6,9 @@ import './declare_modules.d';
 import { setDefaultLocalStorage } from './features/set-default-local-storage';
 import './index.scss';
 import { setupStore } from './redux/store';
-import { asyncServerRequest, createFakeBackend } from './fakeBackend';
+import { createFakeBackend } from './fakeBackend';
 import { BrowserRouter } from 'react-router-dom';
+import { LSVariables } from './vriables/variables';
 
 
 createFakeBackend();
@@ -15,6 +16,10 @@ setDefaultLocalStorage();
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 const store = setupStore();
+
+store.subscribe(() => {
+  localStorage.setItem(LSVariables.TOKEN_STORAGE_NAME, JSON.stringify({key: store.getState().authReducer.token}));
+})
 
 
 root.render(

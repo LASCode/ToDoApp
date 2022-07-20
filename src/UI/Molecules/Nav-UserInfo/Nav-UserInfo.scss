@@ -1,0 +1,31 @@
+.NavUserInfo {
+  position: relative;
+  display: grid;
+  grid-template-columns: 35px 1fr;
+  grid-column-gap: 5px;
+
+  &__avatar {
+    overflow: hidden;
+    height: 35px;
+    width: 35px;
+    border-radius: 5px;
+    background-color: gray;
+  }
+  &__userdata {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: #494949;
+  }
+  &__username {
+    font-size: 13px;
+    line-height: 13px;
+    font-weight: 600;
+  }
+  &__tokens {
+    font-size: 10px;
+    line-height: 10px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}

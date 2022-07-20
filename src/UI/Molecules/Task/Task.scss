@@ -1,0 +1,87 @@
+@import '../../../styles/variables.scss';
+.Task {
+  padding: 5px 10px 10px 5px;
+  background-color: #F5F5F5;
+  border-radius: 5px;
+  box-shadow: #c0c0c0 0 1px 0 0, #c4c4c40d 0 0 0 1px;
+
+  &__actions {
+    display: grid;
+    grid-template-columns: repeat(3, min-content) 1fr min-content;
+    grid-column-gap: 6px;
+    align-items: center;
+  }
+  &__checkbox {
+    height: 15px;
+    width: 15px;
+    border-radius: 2px;
+    border: 1px solid #C3C3C3;
+    background-color: #E9E9E9;
+  }
+  &__status {
+    //line-height: 15px;
+    font-size: 15px;
+    padding: 0 15px;
+    border-radius: 10px;
+    color: white;
+    background-color: #59CD59;
+  }
+  &__action-br {
+    height: 15px;
+    width: 1px;
+    margin: 1px 0;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  &__date {
+    white-space: nowrap;
+    color: rgba(128, 128, 128, 0.7);
+  }
+  &__body {
+    margin-top: 7px;
+    padding-left: 7px;
+  }
+  &__header {
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    grid-column-gap: 10px;
+  }
+  &__name {
+    white-space: nowrap;
+    line-height: 24px;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  &__header-br {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:before {
+      content: '';
+      width: 100%;
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+  &__buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 24px);
+    grid-column-gap: 3px;
+  }
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    width: 24px;
+    background: $button-gradient;
+    border-radius: 3px;
+  }
+  &__description {
+    margin-top: 10px;
+    padding-left: 15px;
+    font-weight: 400;
+    line-height: 15px;
+    font-size: 13px;
+    color: rgba(40, 40, 40, 0.75);
+  }
+}

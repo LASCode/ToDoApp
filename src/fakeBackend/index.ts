@@ -85,7 +85,7 @@ const login = (login: string, password: string): Promise<IBaseResponse<ILoginRes
       return _createPromise<ILoginResponseData>({
         success: true,
         error: false,
-        token: userData.token,
+        token: userData.authToken,
       })
     },
     incorrectData: () => {
@@ -115,19 +115,20 @@ const login = (login: string, password: string): Promise<IBaseResponse<ILoginRes
 }
 const checkAuth = (authToken: string): Promise<IBaseResponse<IAuthResponseData>> => {
   const dataBase: IServerDataBase = _getDataBase();
-  const userWasFound = dataBase.users.some(el => el.token === authToken);
+  const userWasFound = dataBase.users.some(el => el.authToken === authToken);
   const sendResponse = {
     success: () => {
-      const userData = dataBase.users.find(el => el.token === authToken) as IServerUser;
+      const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
       return _createPromise<IAuthResponseData>({
         success: true,
         error: false,
         userData: {
           id: userData.id,
           login: userData.login,
-          token: userData.token,
+          authToken: userData.authToken,
           username: userData.username,
           avatar: userData.avatar,
+          tokens: userData.tokens,
         }
       })
     },
@@ -137,8 +138,9 @@ const checkAuth = (authToken: string): Promise<IBaseResponse<IAuthResponseData>>
         error: 'UserInfo not found',
         userData: {
           id: NaN,
+          tokens: NaN,
           login: '',
-          token: '',
+          authToken: '',
           username: '',
           avatar: '',
         }
@@ -151,9 +153,10 @@ const checkAuth = (authToken: string): Promise<IBaseResponse<IAuthResponseData>>
         userData: {
           id: NaN,
           login: '',
-          token: '',
+          authToken: '',
           username: '',
           avatar: '',
+          tokens: NaN,
         }
       })
     }
@@ -176,7 +179,7 @@ const getTasks = (authToken: string): Promise<IBaseResponse<ITasksResponseData>>
   const authorized = _checkAuth(authToken);
   const sendResponse = {
     success: () => {
-      const userData = dataBase.users.find(el => el.token === authToken) as IServerUser;
+      const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
       return _createPromise<ITasksResponseData>({
         success: true,
         error: false,
@@ -213,7 +216,7 @@ const setTasks = (authToken: string, tasks: ITask[]): Promise<IBaseResponse<ITas
   const authorized = _checkAuth(authToken);
   const sendResponse = {
     success: () => {
-      const userData = dataBase.users.find(el => el.token === authToken) as IServerUser;
+      const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
       userData.tasks = tasks;
       _setDataBase(dataBase)
       return _createPromise<ITasksResponseData>({

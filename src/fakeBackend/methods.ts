@@ -1,6 +1,7 @@
-import { initialStorageName, defaultUserAvatar, initialTimeOut } from './variables';
+import { initialStorageName, defaultUserAvatar, initialTimeOut, rejectChance } from './variables';
 import { IBaseResponse } from '../types/serverResponses';
 import { IServerDataBase, IServerUser } from '../types/entity';
+import { rejects } from 'assert';
 
 
 const _getDataBase = (): IServerDataBase => {
@@ -19,9 +20,10 @@ const _setNewAccount = (login: string, password: string, username: string): stri
     id: dataBase.users.length + 1,
     login: login,
     password: password,
-    token: newToken,
+    authToken: newToken,
     username: username,
     avatar: defaultUserAvatar,
+    tokens: 0,
     tasks: []
   };
   dataBase.users.push(newAccount);
@@ -30,15 +32,21 @@ const _setNewAccount = (login: string, password: string, username: string): stri
 }
 const _checkAuth = (authToken: string): boolean => {
   const dataBase: IServerDataBase = _getDataBase();
-  return dataBase.users.some(el => el.token === authToken);
+  return dataBase.users.some(el => el.authToken === authToken);
 }
 const _createPromise = <T>(body: T, timeout: number = initialTimeOut): Promise<IBaseResponse<T>> => {
-  return new Promise<IBaseResponse<T>>(resolve => setTimeout(() => {
-    resolve({
-      ok: true,
-      status: 200,
-      data: body,
-    })
+  const chance = Math.random();
+  return new Promise<IBaseResponse<T>>((resolve, reject) => setTimeout(() => {
+    if (chance >= rejectChance) {
+      resolve({
+        ok: true,
+        status: 200,
+        data: body,
+      })
+    } else {
+      console.log('Promise Failed')
+      reject('1');
+    }
   }, timeout))
 }
 

@@ -9,6 +9,7 @@ const defaultUserName = 'Неавторизованный пользовател
 const defaultUserId = 0;
 const defaultUserLogin = '';
 const defaultUserToken = 'null'
+const rejectChance = 0.2;
 
 
 export {
@@ -19,5 +20,6 @@ export {
   defaultUserId,
   defaultUserLogin,
   defaultUserName,
-  defaultUserToken
+  defaultUserToken,
+  rejectChance,
 }

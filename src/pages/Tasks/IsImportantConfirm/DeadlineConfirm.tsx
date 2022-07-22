@@ -7,6 +7,8 @@ import 'moment/locale/ru'
 import { Datepicker } from '../../../components/Datepicker/Datepicker';
 import { Button } from '../../../components/Button/Button';
 import { addDays } from 'date-fns';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { taskActions } from '../../../redux/reducers/taskReducer/taskReducer';
 moment.locale('ru', {
   months: ['Январь', 'Январь','Январь','Январь','Январь','Январь','Январь','Январь','Январь','Январь','Январь','Январь']
 })
@@ -14,18 +16,24 @@ moment.locale('ru', {
 
 
 
-interface IDeadlineProps {
-  onConfirm: (value: [number])=>void,
-  onCancel: ()=>void,
-}
+interface IDeadlineProps {}
 
-const DeadlineConfirm = ({ onConfirm, onCancel}: IDeadlineProps) => {
+const DeadlineConfirm = ({}: IDeadlineProps) => {
+  const dispatch = useAppDispatch();
+
   const defaultDate = addDays(Date.now(), 2);
 
   const [ resultDate, setResultDate ] = useState<number>(defaultDate.getTime())
 
-  const confirmDeadline = () => { onConfirm([resultDate]) }
-  const cancelDeadline = () => { onCancel() }
+  const confirmDeadline = () => {
+    dispatch(taskActions.deadlineIsActiveToggle(true));
+    dispatch(taskActions.deadlineSetData([resultDate]));
+    dispatch(taskActions.deadlineIsOpenToggle(false));
+  }
+  const cancelDeadline = () => {
+    dispatch(taskActions.deadlineIsActiveToggle(false));
+    dispatch(taskActions.deadlineIsOpenToggle(false))
+  }
 
   return (
     <ModalPopup contentVerticalAlign='auto'>
@@ -77,7 +85,6 @@ const DeadlineConfirm = ({ onConfirm, onCancel}: IDeadlineProps) => {
               name={0}
             />
           </div>
-
         </div>
         <div className='NewTaskAction__buttons'>
           <Button className='NewTaskAction__button' onClick={cancelDeadline}>Отмена</Button>

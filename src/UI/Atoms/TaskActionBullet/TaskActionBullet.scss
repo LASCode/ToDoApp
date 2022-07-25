@@ -1,0 +1,22 @@
+.TaskActionBullet {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-column-gap: 5px;
+  align-items: start;
+  justify-items: stretch;
+
+  &__number {
+    display: inline-flex;
+    padding: 3px 0;
+    background-color: white;
+    border-radius: 5px;
+    justify-content: center;
+  }
+  &__text {
+    padding: 3px 10px;
+    background-color: white;
+    border-radius: 5px;
+  }
+}

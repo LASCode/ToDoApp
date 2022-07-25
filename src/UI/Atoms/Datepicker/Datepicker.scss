@@ -1,0 +1,120 @@
+@import 'src/styles/variables.scss';
+.Datepicker {
+  position: relative;
+  margin-top: 20px;
+  display: inline-flex;
+
+  &__inputs {
+    display: inline-grid;
+    grid-template-columns: 20px 50px 35px 35px;
+    grid-column-gap: 5px;
+    background-color: white;
+    padding: 4px 10px;
+    border-radius: 5px 0 0 5px;
+  }
+  &__calendar {
+    background: linear-gradient(#00A8A8 100%, #00D2D2 100%);
+    padding: 5px 6px;
+    border-radius: 0 5px 5px 0;
+
+    &>img {
+      height: 16px;
+      width: 16px;
+    }
+  }
+  &__picker-container {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 0;
+  }
+  &__picker-body {
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+}
+
+.react-datepicker {
+  width: 100%;
+  background-color: white;
+  position: relative;
+  border-radius: 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  font-family: $font-montserrat;
+  font-weight: 400;
+
+  &__navigation {
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    font-size: 0;
+    box-sizing: border-box;
+
+    &--previous {
+      top: 3px;
+      left: 3px;
+    }
+    &--next {
+      top: 3px;
+      right: 3px;
+    }
+  }
+  &__header {
+    padding: 3px;
+    background: $button-gradient;
+    //border-bottom: 2px solid #00a0a0;
+    color: white;
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  }
+  &__current-month {
+    line-height: 25px;
+    text-align: center;
+    font-weight: bold;
+  }
+  &__day-names {
+    padding: 5px 0;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  &__day-name {
+    text-align: center;
+  }
+  &__month {
+    display: grid;
+    grid-auto-rows: 1fr;
+    padding: 3px;
+  }
+  &__week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  &__day {
+    width: 100%;
+    height: 0;
+    padding: 50% 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 12px;
+
+    &:hover:not(:focus, &--selected) {
+      background-color: rgba(31,32,65, 0.1);
+    }
+    &:focus:not(:hover, &--selected) {
+      background-color: rgba(31,32,65, 0.1);
+    }
+    &--selected {
+      background-color: #00a0a0;
+      color: white;
+      font-weight: normal;
+    }
+    &--outside-month {
+      color: rgba(0, 0, 0, 0.18);
+    }
+  }
+}

@@ -1,0 +1,65 @@
+.TaskPrimaryForm {
+  display: grid;
+  grid-template-columns: 1fr 30px min-content;
+
+  &__input {
+    padding: 4px 10px;
+    border-radius: 5px 0 0 5px;
+  }
+  &__button-img {
+    width: 30px;
+    height: 30px;
+    &:hover {
+      transform: scale(1.1);
+    }
+    &--rotated {
+      &:hover { transform: scale(1.1) rotate(45deg) }
+      transform: rotate(45deg);
+    }
+  }
+  &__submit-btn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background-color: #00a0a0;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    color: white;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 0 5px 5px 0;
+  }
+  &__close-btn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 30px;
+    padding: 0;
+    border-radius: 5px;
+    background-color: #00a0a0;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    color: white;
+    border: none;
+    box-sizing: border-box;
+    width: 0;
+    opacity: 0;
+    transition: opacity .5s, margin-left .5s, width .5s;
+
+    &.enter-active, &.enter-done {
+      width: 30px;
+      opacity: 1;
+      margin-left: 5px;
+    }
+    &.exit-active, &.exit-done {
+      width: 0;
+      opacity: 0;
+      margin-left: 0;
+    }
+  }
+}

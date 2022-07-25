@@ -1,0 +1,57 @@
+@import 'src/styles/variables.scss';
+.DeadlinePopup {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 560px;
+  background-color: #e0e0e0;
+  border: 1px solid #c8c8c8;
+  box-sizing: border-box;
+  box-shadow: 0 0 13px 8px rgba(34, 60, 80, 0.2);
+  margin: 10px 10px 0 10px;
+
+  &__title {
+    text-align: center;
+    font-family: $font-rubik;
+    font-weight: 600;
+    line-height: 20px;
+    font-size: 15px;
+    padding: 10px 0;
+  }
+  &__description {
+    margin-top: 10px;
+    padding: 0 20px;
+    line-height: 14px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+  &__description-title {
+
+  }
+  &__description-items {
+    display: grid;
+    grid-auto-rows: min-content;
+    grid-row-gap: 5px;
+    margin-top: 5px;
+  }
+  &__actions {
+    margin-top: 10px;
+    padding: 0 20px;
+    line-height: 14px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+  &__actions-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  &__button {
+    width: 150px;
+  }
+}

@@ -8,16 +8,15 @@ import { Calendar } from '../../../components/Calendar/Calendar';
 
 interface IDatePicker {
   initialDate: Date,
-  onChange: (value: number, name: number) => void,
-  name: number,
+  onChange: (value: number) => void,
 }
 
-const Datepicker = ({ initialDate, onChange, name }: IDatePicker) => {
+const Datepicker = ({ initialDate, onChange}: IDatePicker) => {
   const [time, setTime] = useState<Date>(initialDate);
   const [open, setOpen] = useState<boolean>(false);
   const onSelect = (date: Date) => {
     setTime(date);
-    onChange(time.getTime(), name)
+    onChange(time.getTime())
   }
 
   return (

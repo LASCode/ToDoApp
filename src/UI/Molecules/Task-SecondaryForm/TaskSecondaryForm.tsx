@@ -6,37 +6,40 @@ import { Checkbox } from '../../../components/Checkbox/Checkbox';
 import { getClassnamesFromObject } from '../../../features/get-classnames-from-object';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { CSSTransition } from 'react-transition-group';
+import { useFormContext } from 'react-hook-form';
+import { INewTaskTempData } from '../../../types/entity';
 
 const TaskSecondaryForm = () => {
   const dispatch = useAppDispatch();
-  const { NTIsOpen, NTDesc, NTDeadline } = useAppSelector(state => state.taskReducer)
+  const { register, getValues, setValue } = useFormContext<INewTaskTempData>();
+  const { isOpen, deadline } = getValues();
+  const { NTDeadline } = useAppSelector(state => state.taskReducer)
 
   const hiddenFormClassList = getClassnamesFromObject({
     'TaskSecondaryForm': true,
-    'enter-done': NTIsOpen,
+    'enter-done': isOpen,
   });
 
   return (
-    <CSSTransition in={NTIsOpen} timeout={500}>
+    <CSSTransition in={isOpen} timeout={500}>
       <div className={hiddenFormClassList}>
         <Textarea
           className={'TaskSecondaryForm__textarea'}
           placeholder={'Дополнительно о задаче (необязательно)'}
-          value={NTDesc}
-          onChange={(event) => dispatch(taskActions.setTaskDescription(event.target.value))}
+          {...register('description')}
         />
         <div className='TaskSecondaryForm__taskActions'>
-          <button className='TaskSecondaryForm__taskAction' type='button' onClick={() => dispatch(taskActions.deadlineIsOpenToggle(true))}>
+          <button className='TaskSecondaryForm__taskAction' type='button' onClick={() => setValue('deadline.isOpen', true)}>
             <span>Хочу дедлайн!</span>
-            <Checkbox checked={NTDeadline.isActive} readOnly />
+            <Checkbox checked={deadline.isActive} readOnly />
           </button>
-          <button className='TaskSecondaryForm__taskAction' type='button' onClick={() => dispatch(taskActions.deadlineIsOpenToggle(true))}>
+          <button className='TaskSecondaryForm__taskAction' type='button' onClick={() => setValue('important.isOpen', true)}>
             <span>Хочу дедлайн!</span>
-            <Checkbox checked={NTDeadline.isActive} readOnly />
+            {/*<Checkbox checked={NTDeadline.isActive} readOnly />*/}
           </button>
-          <button className='TaskSecondaryForm__taskAction' type='button' onClick={() => dispatch(taskActions.deadlineIsOpenToggle(true))}>
+          <button className='TaskSecondaryForm__taskAction' type='button' onClick={() => setValue('notification.isOpen', true)}>
             <span>Хочу дедлайн!</span>
-            <Checkbox checked={NTDeadline.isActive} readOnly />
+            {/*<Checkbox checked={NTDeadline.isActive} readOnly />*/}
           </button>
         </div>
       </div>

@@ -6,30 +6,23 @@ import CrossSvg from '../../../assets/img/icon-add.svg';
 import { CSSTransition } from 'react-transition-group';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getClassnamesFromObject } from '../../../features/get-classnames-from-object';
-import { setTask } from '../../../redux/actions';
+import { setNewTaskData, setTask } from '../../../redux/actions';
+import { useFormContext } from 'react-hook-form';
+import { INewTaskTempData } from '../../../types/entity';
 
-const TaskPrimaryForm = () => {
-  const dispatch = useAppDispatch();
-  const { NTIsOpen, NTName } = useAppSelector(state => state.taskReducer)
+interface ITaskPrimaryForm {
+  onClose: () => void,
+  onOpen: () => void;
+}
 
-  const onOpen = () => {
-    dispatch(taskActions.isOpenToggle(true))
-  }
-  const onClose = () => {
-    dispatch(taskActions.isOpenToggle(false))
-  }
-  const onSubmit = () => {
-    dispatch(setTask())
-    // dispatch(taskActions.createNewTask());
-    dispatch(taskActions.clearNTForm());
-    dispatch(taskActions.isOpenToggle(false));
-  }
+const TaskPrimaryForm = ({ onClose, onOpen }: ITaskPrimaryForm) => {
+  const { register, getValues } = useFormContext<INewTaskTempData>();
+  const { isOpen } = getValues();
 
   const closeButtonClassList = getClassnamesFromObject({
     'TaskPrimaryForm__close-btn': true,
-    'enter-done': NTIsOpen,
+    'enter-done': isOpen,
   });
-
 
   return (
     <div className='TaskPrimaryForm'>
@@ -38,13 +31,15 @@ const TaskPrimaryForm = () => {
         placeholder='Введите новую задачу...'
         onFocus={onOpen}
         autoComplete='off'
-        value={NTName}
-        onChange={(event) => dispatch(taskActions.setTaskName(event.target.value))}
+        // value={NTName}
+        // // onChange={(event) => dispatch(taskActions.setTaskName(event.target.value))}
+        {...register('name')}
       />
-      <button className='TaskPrimaryForm__submit-btn' type='button' onClick={onSubmit}>
+      {/*<button className='TaskPrimaryForm__submit-btn' type='button' onClick={onSubmit}>*/}
+      <button className='TaskPrimaryForm__submit-btn' type='submit'>
         <img className='TaskPrimaryForm__button-img' src={CrossSvg} alt='Добавить задачу'/>
       </button>
-      <CSSTransition in={NTIsOpen} timeout={500}>
+      <CSSTransition in={isOpen} timeout={500}>
         <button className={closeButtonClassList} onClick={onClose} type='button'>
           <img className='TaskPrimaryForm__button-img TaskPrimaryForm__button-img--rotated' src={CrossSvg} alt='Добавить задачу'/>
         </button>

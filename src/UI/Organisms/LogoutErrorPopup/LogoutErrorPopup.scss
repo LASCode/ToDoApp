@@ -1,0 +1,26 @@
+@import 'src/styles/variables.scss';
+.AuthErrorPopup {
+  padding: 25px;
+  border-radius: 5px;
+  //width: 100%;
+  max-width: 300px;
+  background-color: #e0e0e0;
+  border: 1px solid #c8c8c8;
+  //box-sizing: border-box;
+  box-shadow: 0 0 13px 8px rgba(34, 60, 80, 0.2);
+  margin: 10px 10px 0 10px;
+
+  &__title {
+    font-family: $font-rubik;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+  }
+  &__buttons {
+    margin-top: 20px;
+    display: grid;
+    grid-row-gap: 5px;
+  }
+}

@@ -51,6 +51,7 @@ interface INewTaskTempData_short {
 
 type TaskActionValue = (null | number);
 type TaskStatusValue = 'Active' | 'Archive' | 'Deleted' | 'Failed';
+type TaskActionsFetching = 'status' | 'completing'
 interface ITask {
   id: number,
   name: string,
@@ -60,9 +61,12 @@ interface ITask {
   notification: { isActive: boolean, value: TaskActionValue[] },
   status: TaskStatusValue,
   unix: number,
+
   isSynchronized: boolean,
   isFetching: boolean,
+  actionFetchingArray: TaskActionsFetching[],
   error: string | null,
+  checked: boolean,
 }
 interface ITask_Short {
   name: string,

@@ -41,6 +41,11 @@ interface ITaskResponseSynchronizeData {
   error: string | null,
   task: ITask_Server | null,
 }
+interface ITaskResponseUpdateData {
+  success: boolean,
+  error: string | null;
+  tasks: ITask_Server[] | null;
+}
 
 
 export type {
@@ -51,4 +56,5 @@ export type {
   IRegisterResponseData,
   ILogoutUserData,
   ITaskResponseSynchronizeData,
+  ITaskResponseUpdateData,
 };

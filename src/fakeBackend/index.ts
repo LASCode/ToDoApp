@@ -1,14 +1,21 @@
-import { _setNewAccount, _getDataBase, _setDataBase, _checkAuth, _createPromise } from './methods';
+import {
+  _setNewAccount,
+  _getDataBase,
+  _setDataBase,
+  _checkAuth,
+  _createPromise,
+  _createRandomToken,
+  _useUser
+} from './methods';
 import { initialStorageName, initialTimeOut, initialDataBase } from './variables';
 import {
   IAuthResponseData,
   IBaseResponse,
-  ILoginResponseData,
-  IRegisterResponseData,
+  ILoginResponseData, ILogoutUserData,
+  IRegisterResponseData, ITaskResponseSynchronizeData, ITaskResponseUpdateData,
   ITasksResponseData
 } from '../types/serverResponses';
-import { IServerDataBase, ITask, IServerUser } from '../types/entity';
-
+import { IServerDataBase, IServerUser, ITask_Server } from '../types/entity';
 
 
 //initialMethod
@@ -121,7 +128,7 @@ const checkAuth = (authToken: string): Promise<IBaseResponse<IAuthResponseData>>
       const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
       return _createPromise<IAuthResponseData>({
         success: true,
-        error: false,
+        error: null,
         userData: {
           id: userData.id,
           login: userData.login,
@@ -136,28 +143,14 @@ const checkAuth = (authToken: string): Promise<IBaseResponse<IAuthResponseData>>
       return _createPromise<IAuthResponseData>({
         success: false,
         error: 'UserInfo not found',
-        userData: {
-          id: NaN,
-          tokens: NaN,
-          login: '',
-          authToken: '',
-          username: '',
-          avatar: '',
-        }
+        userData: null
       })
     },
     unknownError: () => {
       return _createPromise<IAuthResponseData>({
         success: false,
         error: 'Unknown error in "CheckAuthFunc"',
-        userData: {
-          id: NaN,
-          login: '',
-          authToken: '',
-          username: '',
-          avatar: '',
-          tokens: NaN,
-        }
+        userData: null
       })
     }
   }
@@ -171,30 +164,68 @@ const checkAuth = (authToken: string): Promise<IBaseResponse<IAuthResponseData>>
       return sendResponse.unknownError();
   }
 }
-const logout = (authToken: string) => {}
+const logout = (authToken: string): Promise<IBaseResponse<ILogoutUserData<null>>> => {
+  const dataBase: IServerDataBase = _getDataBase();
+  const userWasFound = dataBase.users.some(el => el.authToken === authToken);
+  const sendResponse = {
+    success: () => {
+      const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
+      userData.authToken = _createRandomToken();
+      _setDataBase(dataBase)
+      return _createPromise<ILogoutUserData<null>>({
+        success: true,
+        error: null,
+        userData: null
+      })
+    },
+    unauthorized: () => {
+      return _createPromise<ILogoutUserData<null>>({
+        success: false,
+        error: 'Token not found',
+        userData: null
+      })
+    },
+    unknownError: () => {
+      return _createPromise<ILogoutUserData<null>>({
+        success: false,
+        error: 'Unknown error in "CheckAuthFunc"',
+        userData: null
+      })
+    }
+  }
+
+  switch (true) {
+    case userWasFound:
+      return sendResponse.success();
+    case !userWasFound:
+      return sendResponse.unauthorized();
+    default:
+      return sendResponse.unknownError();
+  }
+}
 
 //tasks
-const getTasks = (authToken: string): Promise<IBaseResponse<ITasksResponseData>> => {
+const getTasks = (authToken: string): Promise<IBaseResponse<ITasksResponseData<ITask_Server[]>>> => {
   const dataBase: IServerDataBase = _getDataBase();
   const authorized = _checkAuth(authToken);
   const sendResponse = {
     success: () => {
       const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
-      return _createPromise<ITasksResponseData>({
+      return _createPromise<ITasksResponseData<ITask_Server[]>>({
         success: true,
-        error: false,
+        error: null,
         tasks: userData.tasks,
       })
     },
     unauthorized: () => {
-      return _createPromise<ITasksResponseData>({
+      return _createPromise<ITasksResponseData<ITask_Server[]>>({
         success: false,
         error: 'Unauthorized',
         tasks: [],
       })
     },
     unknownError: () => {
-      return _createPromise<ITasksResponseData>({
+      return _createPromise<ITasksResponseData<ITask_Server[]>>({
         success: false,
         error: 'Unknown error in "GetTasksFunc"',
         tasks: [],
@@ -211,7 +242,7 @@ const getTasks = (authToken: string): Promise<IBaseResponse<ITasksResponseData>>
       return sendResponse.unknownError();
   }
 }
-const setTasks = (authToken: string, tasks: ITask[]): Promise<IBaseResponse<ITasksResponseData>> => {
+const setTasks = (authToken: string, tasks: ITask_Server[]): Promise<IBaseResponse<ITasksResponseData<ITask_Server[]>>> => {
   const dataBase: IServerDataBase = _getDataBase();
   const authorized = _checkAuth(authToken);
   const sendResponse = {
@@ -219,21 +250,21 @@ const setTasks = (authToken: string, tasks: ITask[]): Promise<IBaseResponse<ITas
       const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
       userData.tasks = tasks;
       _setDataBase(dataBase)
-      return _createPromise<ITasksResponseData>({
+      return _createPromise<ITasksResponseData<ITask_Server[]>>({
         success: true,
-        error: false,
+        error: null,
         tasks: userData.tasks,
       })
     },
     unauthorized: () => {
-      return _createPromise<ITasksResponseData>({
+      return _createPromise<ITasksResponseData<ITask_Server[]>>({
         success: false,
         error: 'Unauthorized',
         tasks: [],
       })
     },
     unknownError: () => {
-      return _createPromise<ITasksResponseData>({
+      return _createPromise<ITasksResponseData<ITask_Server[]>>({
         success: false,
         error: 'Unknown error in "GetTasksFunc"',
         tasks: [],
@@ -249,28 +280,110 @@ const setTasks = (authToken: string, tasks: ITask[]): Promise<IBaseResponse<ITas
     default:
       return sendResponse.unknownError();
   }
-
-
-
-
-
-
-
-
-
-
-  // const dataBase = _getDataBase();
-  // const authorized = dataBase.users.some(el => el.token === authToken);
-  // const accountsData = dataBase.users.find(el => el.token === authToken);
-  //
-  // if (authorized && accountsData !== undefined) {
-  //   accountsData.tasks = tasks;
-  //   _setDataBase(dataBase);
-  //   return _createPromise<ITaskResponse>({ ok: true, error: '' })
-  // } else {
-  //   return _createPromise<ITaskResponse>({ ok: false, error: 'unauthorized' })
-  // }
 }
+const setTask = (authToken: string, task: ITask_Server): Promise<IBaseResponse<ITaskResponseSynchronizeData>> => {
+  const dataBase: IServerDataBase = _getDataBase();
+  const authorized = _checkAuth(authToken);
+  const sendResponse = {
+    success: () => {
+      const userData = dataBase.users.find(el => el.authToken === authToken) as IServerUser;
+      userData.tasks.unshift(task);
+      _setDataBase(dataBase)
+      return _createPromise<ITaskResponseSynchronizeData>({
+        success: true,
+        error: null,
+        task: task,
+      })
+    },
+    unauthorized: () => {
+      return _createPromise<ITaskResponseSynchronizeData>({
+        success: false,
+        error: 'Unauthorized',
+        task: null,
+      })
+    },
+    unknownError: () => {
+      return _createPromise<ITaskResponseSynchronizeData>({
+        success: false,
+        error: 'Unknown error in "GetTasksFunc"',
+        task: null,
+      })
+    }
+  }
+
+  switch (true) {
+    case authorized:
+      return sendResponse.success();
+    case !authorized:
+      return sendResponse.unauthorized();
+    default:
+      return sendResponse.unknownError();
+  }
+}
+const updateTask = (authToken: string, task: ITask_Server): Promise<IBaseResponse<ITaskResponseSynchronizeData>> => {
+  const { isAuth, updateTask, findTask } = _useUser(authToken);
+  const sendResponse = {
+    success: () => {
+      updateTask(task);
+      return _createPromise<ITaskResponseSynchronizeData>({
+        success: true,
+        error: null,
+        task: task,
+      })
+    },
+    taskNotFound: () => {
+      return _createPromise<ITaskResponseSynchronizeData>({
+        success: false,
+        error: 'Task not found',
+        task: null,
+      })
+    },
+    unauthorized: () => {
+      return _createPromise<ITaskResponseSynchronizeData>({
+        success: false,
+        error: 'Unauthorized',
+        task: null,
+      })
+    },
+    unknownError: () => {
+      return _createPromise<ITaskResponseSynchronizeData>({
+        success: false,
+        error: 'Unknown error in "updateTask"',
+        task: null,
+      })
+    }
+  }
+
+  switch (true) {
+    case isAuth:
+      return sendResponse.success();
+    case !isAuth:
+      return sendResponse.unauthorized();
+    case !findTask(task.id):
+      return sendResponse.taskNotFound();
+    default:
+      return sendResponse.unknownError();
+  }
+}
+
+const test = (authToken: string, tasks: ITask_Server[]): Promise<IBaseResponse<ITaskResponseUpdateData>> => {
+  const { findTask } = _useUser(authToken);
+  const dataBase: IServerDataBase = _getDataBase();
+  const isAuthorized = _checkAuth(authToken);
+  const tasksNotFound: number[] = tasks.reduce((prev: number[], curr) => !findTask(curr.id) ? [...prev, curr.id] : [...prev], []);
+
+  try {
+    switch (true) {
+      case !isAuthorized: return _createPromise({success: false, error: 'AuthTokenFailed', tasks: null})
+      case !!tasksNotFound.length: return _createPromise({success: false, error: `${tasksNotFound.join(', ')} task not found`, tasks: null})
+      default: return _createPromise({success: true, error: null, tasks: tasks});
+    }
+  } catch {
+    return _createPromise({success: false, error: 'unc error', tasks: null})
+  }
+
+}
+
 
 const asyncServerRequest = {
   register,
@@ -279,6 +392,8 @@ const asyncServerRequest = {
   logout,
   getTasks,
   setTasks,
+  setTask,
+  updateTask,
 }
 
 export {

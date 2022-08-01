@@ -5,36 +5,26 @@ interface IBaseResponse<T> {
   status: number,
   data: T,
 }
-
-interface IRegisterResponseData {
-  success: boolean,
-  error: string | false,
-  token: string | false,
-}
-
-interface ILoginResponseData {
-  success: boolean,
-  error: string | false,
-  token: string | false,
-}
-
-interface IAuthResponseData {
+interface IDefaultResponseData {
   success: boolean,
   error: string | null,
+}
+
+interface ICheckAuthResponseData extends IDefaultResponseData {}
+interface IAuthResponseData extends IDefaultResponseData {
   userData: IServerUserShort | null,
 }
-
-interface ILogoutUserData<T> {
-  success: boolean,
-  error: string | null,
-  userData: T,
+interface IRegisterResponseData extends IDefaultResponseData {
+  token: string | null,
+}
+interface ILoginResponseData extends IDefaultResponseData {
+  token: string | null,
+}
+interface ILogoutUserData extends IDefaultResponseData {}
+interface ITasksResponseData extends IDefaultResponseData {
+  tasks: ITask_Server[],
 }
 
-interface ITasksResponseData<T> {
-  success: boolean,
-  error: string | null,
-  tasks: T,
-}
 
 interface ITaskResponseSynchronizeData {
   success: boolean,
@@ -44,12 +34,12 @@ interface ITaskResponseSynchronizeData {
 interface ITaskResponseUpdateData {
   success: boolean,
   error: string | null;
-  tasks: ITask_Server[] | null;
 }
 
 
 export type {
   IBaseResponse,
+  ICheckAuthResponseData,
   IAuthResponseData,
   ILoginResponseData,
   ITasksResponseData,
